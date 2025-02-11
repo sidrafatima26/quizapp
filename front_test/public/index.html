@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OTP Verification</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Email Input Section -->
+
+
+    <!-- OTP Status Message -->
+    <p id="otp-status"></p> <!-- The OTP status message will be displayed here -->
+
+    <script>
+      // Function to send OTP
+      async function sendOtp() {
+        const email = document.getElementById('email').value;
+        try {
+          const response = await fetch('http://localhost:5000/api/send-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+          });
+          const data = await response.json();
+          document.getElementById('otp-status').textContent = data.message;
+        } catch (error) {
+          document.getElementById('otp-status').textContent = 'Error sending OTP';
+        }
+      }
+
+      // Function to verify OTP and navigate
+      async function verifyOtp() {
+        const email = document.getElementById('email').value;
+        const otp = document.getElementById('otp').value;
+        try {
+          const response = await fetch('http://localhost:5000/api/verify-otp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, otp })
+          });
+
+          const data = await response.json();
+          console.log("Server Response:", data); // Debugging line
+
+          // Check if the OTP verification was successful
+          if (data.success === true) {
+            document.getElementById('otp-status').textContent = data.message;
+            console.log("OTP verified successfully. Preparing to redirect...");
+
+            // **Simplified Redirection**: Direct redirection to /home after a delay
+            setTimeout(() => {
+              console.log("Redirecting to /home...");
+              window.location.href = '/home';  // Direct redirection to homepage
+            }, 500);  // Delay of 500ms for smooth transition
+          } else {
+            console.log("OTP verification failed.");
+            document.getElementById('otp-status').textContent = data.message;
+          }
+        } catch (error) {
+          console.error("Error during OTP verification:", error);
+          document.getElementById('otp-status').textContent = 'Invalid OTP';
+        }
+      }
+    </script>
+  </body>
+</html>
