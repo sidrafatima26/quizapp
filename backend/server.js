@@ -36,7 +36,7 @@ app.post('/api/send-otp', (req, res) => {
   const { email } = req.body;
 
   // Check if email already exists in the database
-  db.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
+  db.query('SELECT * FROM users WHERE email = $1', [email], async (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Database error', error: err });
     }
@@ -47,12 +47,12 @@ app.post('/api/send-otp', (req, res) => {
 
     // Generate OTP
     const otp = generateOtp();
-
+    
     // Set OTP expiration time (5 minutes from now)
     const otpExpiration = new Date(Date.now() + 5 * 60 * 1000);  // OTP expires in 5 minutes
 
     // Store OTP in the database
-    db.query('UPDATE users SET otp = ?, otp_verified = ?, otp_expiration = ? WHERE email = ?', 
+    db.query('UPDATE users SET otp = $1, otp_verified = $2, otp_expiration = $3 WHERE email = $4', 
       [otp, false, otpExpiration, email], async (err, updateResults) => {
       if (err) {
         return res.status(500).json({ message: 'Error storing OTP', error: err });
@@ -75,7 +75,7 @@ app.post('/api/send-otp', (req, res) => {
 app.post('/api/verify-otp', (req, res) => {
   const { email, otp } = req.body;
 
-  db.query('SELECT otp, otp_expiration, id FROM users WHERE email = ?', [email], (err, results) => {
+  db.query('SELECT otp, otp_expiration, id FROM users WHERE email = $1', [email], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Database error', error: err });
     }
@@ -84,8 +84,8 @@ app.post('/api/verify-otp', (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const storedOtp = results[0].otp;
-    const otpExpiration = new Date(results[0].otp_expiration);
+    const storedOtp = results.rows[0].otp;
+    const otpExpiration = new Date(results.rows[0].otp_expiration);
 
     // Check if OTP has expired
     if (new Date() > otpExpiration) {
@@ -95,14 +95,14 @@ app.post('/api/verify-otp', (req, res) => {
     // Check if OTP matches
     if (storedOtp === otp) {
       // OTP is valid, mark it as verified in the database
-      db.query('UPDATE users SET otp_verified = ? WHERE email = ?', [true, email], (err, updateResults) => {
+      db.query('UPDATE users SET otp_verified = $1 WHERE email = $2', [true, email], (err, updateResults) => {
         if (err) {
           return res.status(500).json({ message: 'Error verifying OTP', error: err });
         }
 
         // Create session for the user after OTP verification
         req.session.user = {
-          userId: results[0].id,
+          userId: results.rows[0].id,
           email: email,
           sessionId: req.sessionID, // Store session ID explicitly
         };
@@ -131,7 +131,7 @@ app.get('/api/quizzes', (req, res) => {
       console.error('Error fetching quizzes:', err);
       return res.status(500).json({ message: 'Error fetching quizzes', error: err });
     }
-    res.status(200).json(results);  // Send the fetched quizzes as a response
+    res.status(200).json(results.rows);  // Send the fetched quizzes as a response
   });
 });
 
@@ -139,7 +139,7 @@ app.get('/api/quizzes', (req, res) => {
 app.get('/api/quiz/:id', (req, res) => {
   const quizId = req.params.id;
 
-  db.query('SELECT * FROM quizzes WHERE id = ?', [quizId], (err, results) => {
+  db.query('SELECT * FROM quizzes WHERE id = $1', [quizId], (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Error fetching quiz data', error: err });
     }
@@ -148,14 +148,14 @@ app.get('/api/quiz/:id', (req, res) => {
       return res.status(404).json({ message: 'Quiz not found' });
     }
 
-    db.query('SELECT * FROM questions WHERE quiz_id = ?', [quizId], (err, questions) => {
+    db.query('SELECT * FROM questions WHERE quiz_id = $1', [quizId], (err, questions) => {
       if (err) {
         return res.status(500).json({ message: 'Error fetching quiz questions', error: err });
       }
 
       const quizData = {
-        ...results[0],  // Quiz information
-        questions: questions,  // Quiz questions
+        ...results.rows[0],  // Quiz information
+        questions: questions.rows,  // Quiz questions
       };
 
       return res.status(200).json(quizData);
@@ -172,7 +172,7 @@ const getSelectedAnswers = async (userId, quizId, selectedAnswers) => {
     const questionsQuery = `
       SELECT id, marks, answer_options
       FROM questions
-      WHERE quiz_id = ?
+      WHERE quiz_id = $1
     `;
     const [questions] = await db.promise().query(questionsQuery, [quizId]);
 
@@ -213,7 +213,7 @@ app.post('/api/submit-quiz', async (req, res) => {
 
     const insertResultQuery = `
       INSERT INTO results (session_id, user_id, quiz_id, score)
-      VALUES (?, ?, ?, ?)
+      VALUES ($1, $2, $3, $4)
     `;
     await db.execute(insertResultQuery, [sessionId, userId, quizId, totalScore]);
 

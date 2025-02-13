@@ -14,7 +14,7 @@ s = smtplib.SMTP('smtp.gmail.com', 587)
 s.starttls()
 
 # Authentication with the new sender Gmail address and the generated App Password
-s.login(sendersEmail, password)  
+s.login(sendersEmail, password)  # Use the App Password here
 
 # Craft the email message with headers
 message = f"Subject: {subject}\n\n{body}"

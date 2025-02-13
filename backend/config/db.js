@@ -1,19 +1,24 @@
-const mysql = require('mysql2');
-
-// Database connection setup
-const db = mysql.createConnection({
-  host: 'localhost',   // Database host
-  user: 'root',        // Your MySQL username
-  password: 'root',    // Your MySQL password
-  database: 'quiz_app' // Your MySQL database
+const { Pool } = require('pg');
+ 
+// Connection string
+const connectionString = 'postgres://neondb_owner:npg_iGkUova18WBx@ep-green-tree-a5021s5y-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require';
+// Replace with your actual connection string
+// Example: postgresql://myuser:mypassword@localhost:5432/mydb
+ 
+// Connection configuration using connection string
+const db = new Pool({
+  connectionString: connectionString,
 });
-
-db.connect((err) => {
+ 
+// Test the connection
+db.connect((err, client, release) => {
   if (err) {
-    console.error('Error connecting to the database:', err);
-    process.exit(1); // Exit the process if connection fails
+    console.error('Error connecting to PostgreSQL:', err);
+    process.exit(1); // Exit if connection fails
+  } else {
+    console.log('Connected to PostgreSQL database');
+    release(); // Release the client back to the pool
   }
-  console.log('Connected to MySQL database');
 });
-
+ 
 module.exports = db;

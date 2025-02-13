@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import './../../src/App.css';
 
 const QuizResultPage = () => {
   const { id } = useParams(); // Get quiz ID from URL parameter
@@ -10,23 +9,24 @@ const QuizResultPage = () => {
   useEffect(() => {
     const createConfetti = () => {
       const confettiContainer = document.querySelector('.confetti-container');
+      
       const confettiElements = []; // To store confetti elements for later removal
-
+  
       for (let i = 0; i < 100; i++) {
         const confetti = document.createElement('div');
         confetti.classList.add('confetti');
-
+  
         // Random X, Y positions for confetti explosion
         const randomX = Math.random() * 100;
         const randomY = Math.random() * 100;
-
+  
         // Random animation class for varying speeds and directions
         const animationType = Math.random() < 0.33 
           ? 'confetti-pop-slow' 
           : Math.random() < 0.66 
             ? 'confetti-pop-medium' 
             : 'confetti-pop-fast';
-
+  
         confetti.classList.add(animationType);
         confetti.style.left = `${randomX}%`;
         confetti.style.top = `${randomY}%`;
@@ -37,7 +37,7 @@ const QuizResultPage = () => {
         
         // Store confetti element for cleanup
         confettiElements.push(confetti);
-
+  
         // Remove confetti after animation ends
         setTimeout(() => {
           if (confettiContainer.contains(confetti)) {
@@ -46,15 +46,16 @@ const QuizResultPage = () => {
         }, 3000); // Match animation duration
       }
     };
-
+  
     createConfetti(); // Trigger confetti when component loads
-
+  
     return () => {
       // Clean up confetti on unmount
       const confettiContainer = document.querySelector('.confetti-container');
       confettiContainer.innerHTML = ''; // Remove all existing confetti
     };
-  }, []); // Only run once, when the component mounts
+  }, []);
+  
 
   return (
     <div className="container">
