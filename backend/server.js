@@ -9,13 +9,30 @@ const session = require('express-session'); // Import express-session for sessio
 const app = express();
 
 // Middleware
-app.use(express.json());
+/*app.use(express.json());
 app.use(cors(
   {
     origin: 'http://localhost:3000', // Allow React app's origin
     credentials: true, // Allow cookies and credentials
   }
-)); // To allow frontend requests
+)); // To allow frontend requests*/
+// Allowing frontend URLs to be dynamic based on environment
+const allowedOrigins = [
+  'http://localhost:3000',  // Local development URL
+  process.env.FRONTEND_URL,  // Production frontend URL (set in environment variables)
+];
+
+// Middleware
+app.use(express.json());
+app.use(cors({
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true, // Allow cookies and credentials
+}));
 
 // Session setup (before routes)
 app.use(session({
