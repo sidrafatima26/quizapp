@@ -1,15 +1,14 @@
 const { Pool } = require('pg');
- 
-// Connection string
-const connectionString = 'postgres://neondb_owner:npg_iGkUova18WBx@ep-green-tree-a5021s5y-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require';
-// Replace with your actual connection string
-// Example: postgresql://myuser:mypassword@localhost:5432/mydb
- 
-// Connection configuration using connection string
+require('dotenv').config(); // This will load the environment variables
+
+// Connection string using the environment variable
+const connectionString = process.env.DB_CONNECTION_STRING;
+
+// Connection configuration using the connection string
 const db = new Pool({
   connectionString: connectionString,
 });
- 
+
 // Test the connection
 db.connect((err, client, release) => {
   if (err) {
@@ -20,5 +19,5 @@ db.connect((err, client, release) => {
     release(); // Release the client back to the pool
   }
 });
- 
+
 module.exports = db;
