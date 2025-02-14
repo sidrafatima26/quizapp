@@ -14,7 +14,7 @@ const QuizPage = () => {
   useEffect(() => {
     const fetchQuizData = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/quiz/${id}`);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_BASEURL}/api/quiz/${id}`);
         const data = await response.json();
         console.log('Fetched Quiz Data:', data);
         
@@ -82,7 +82,7 @@ const QuizPage = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/submit-quiz', {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_BASEURL}/api/submit-quiz`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ quizId: id, answers: getAnswers() }),

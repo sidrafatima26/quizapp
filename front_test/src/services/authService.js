@@ -5,7 +5,7 @@
 // Send OTP request to the server
 export const sendOtp = async (email) => {
   try {
-    const response = await fetch('http://localhost:5000/api/send-otp', {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_BASEURL}/api/send-otp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -28,7 +28,7 @@ export const sendOtp = async (email) => {
 // Verify OTP request to the server
 export const verifyOtp = async (email, otp) => {
   try {
-    const response = await fetch('http://localhost:5000/api/verify-otp', {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_BASEURL}/api/verify-otp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

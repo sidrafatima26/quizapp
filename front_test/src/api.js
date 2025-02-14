@@ -1,7 +1,7 @@
 // Send OTP to the user's email
 export const sendOtp = async (email) => {
   try {
-    const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_BASEURL}/api/send-otp`, {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_BASEURL}/api/send-otp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -25,7 +25,7 @@ export const sendOtp = async (email) => {
 
 export const verifyOtp = async (email, otp) => {
   try {
-    const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_BASEURL}/api/verify-otp`, {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_BASEURL}/api/verify-otp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ export const verifyOtp = async (email, otp) => {
 // Fetch the details of a single quiz by its ID
 export const getQuizDetails = async (quizId) => {
   try {
-    const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_BASEURL}/api/quiz/${quizId}`);
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_BASEURL}/api/quiz/${quizId}`);
     if (!response.ok) {
       throw new Error('Failed to fetch quiz details');
     }
@@ -67,7 +67,7 @@ export const getQuizDetails = async (quizId) => {
 // Fetch all quizzes
 export const getQuizzes = async () => {
   try {
-    const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_BASEURL}/api/quizzes`);
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_BASEURL}/api/quizzes`);
     if (!response.ok) {
       throw new Error('Failed to fetch quizzes');
     }
@@ -81,7 +81,7 @@ export const getQuizzes = async () => {
 // Submit quiz results
 export const submitQuizResult = async (result) => {
   try {
-    const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_BASEURL}/api/submit-quiz`, {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_BASEURL}/api/submit-quiz`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

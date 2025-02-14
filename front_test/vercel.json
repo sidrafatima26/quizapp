@@ -1,15 +1,4 @@
 {
-    "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
-    "builds": [
-      {
-        "src": "front_test/package.json",
-        "use": "@vercel/node",
-        "config": {
-          "npm": {
-            "install": "npm install --unsafe-perm=true"
-          }
-        }
-      }
-    ]
+    "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
   }
   
