@@ -1,16 +1,13 @@
 {
-    "rewrites": [
-        { 
-            "source": "/(.*)", 
-            "destination": "/"
-        }
-    ],
+    "version": 2,
     "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/react"
+      {
+        "src": "front_test/package.json",
+        "use": "@vercel/react"
+      }
+    ],
+    "env": {
+      "REACT_APP_BACKEND_BASEURL": "https://your-backend-url.vercel.app"
     }
-  ]
-
   }
   
