@@ -1,16 +1,16 @@
-{
-    "rewrites": [
-        { 
-            "source": "/(.*)", 
-            "destination": "/"
-        }
-    ],
+  {
+    "version": 2,
     "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/react"
-    }
-  ]
-
+      {
+        "src": "build/**/*",
+        "use": "@vercel/static"
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/"
+      }
+    ]
   }
   
