@@ -1,16 +1,17 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "backend/api/index.js",
-        "use": "@vercel/node"
-      }
+    "installCommand":"npm install --legacy-peer-deps",
+    "version":2,
+    "builds":[
+        {
+            "src":"server.js",
+            "use":"@vercel/node"
+        },
+        {
+            "src":"src//**.*",
+            "use": "@vercel/static"
+        }
     ],
-    "env": {
-      "DB_CONNECTION_STRING": "postgresql://neondb_owner:npg_iGkUova18WBx@ep-green-tree-a5021s5y-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require",
-      "DB_PASSWORD": "npg_iGkUova18WBx",
-      "EMAIL_USER": "sajidkholood@gmail.com",
-      "EMAIL_PASS": "spkb wiqc ilfd oxbb"
-    }
-  }
-  
+    "routes":[
+        {"src": "/(.*)", "dest": "/"}
+    ]
+}
