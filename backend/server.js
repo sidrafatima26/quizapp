@@ -5,9 +5,13 @@ const crypto = require('crypto');
 const sendMail = require('./utils/mailer');  // Import the mailer code with PowerShell Outlook automation
 const db = require('./config/db'); // Import the MySQL database connection
 const session = require('express-session'); // Import express-session for session management
+const { Pool } = require('pg');
 
 const app = express();
-
+// Database connection
+const db = new Pool({
+  connectionString: process.env.DB_CONNECTION_STRING,  // Postgres connection string
+});
 // Middleware
 /*app.use(express.json());
 app.use(cors(
@@ -237,6 +241,11 @@ app.post('/api/submit-quiz', async (req, res) => {
 });
 
 // Start the server
-app.listen(5000, () => {
+/*app.listen(5000, () => {
   console.log('Server running on port 5000');
+});*/
+
+const PORT = process.env.PORT || 5000;  // Default to 5000 if not provided by environment
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
