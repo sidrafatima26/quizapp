@@ -5,13 +5,10 @@ const crypto = require('crypto');
 const sendMail = require('./utils/mailer');  // Import the mailer code with PowerShell Outlook automation
 const db = require('./config/db'); // Import the MySQL database connection
 const session = require('express-session'); // Import express-session for session management
-const { Pool } = require('pg');
+
 
 const app = express();
-// Database connection
-const db = new Pool({
-  connectionString: process.env.DB_CONNECTION_STRING,  // Postgres connection string
-});
+
 // Middleware
 /*app.use(express.json());
 app.use(cors(
