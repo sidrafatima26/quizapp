@@ -63,10 +63,10 @@ const generateOtp = () => {
 
 // Route to send OTP to the user's email
 app.post('/api/send-otp', (req, res) => {
-  const { email="kholoods@amdocs.com" } = req.body;
+  //const { email="kholoods@amdocs.com" } = req.body;
 
   // Check if email already exists in the database
-  db.query('SELECT * FROM users WHERE email = $1', [email], async (err, results) => {
+  db.query('SELECT * FROM users WHERE email = $1', [email="kholood@amdocs.com"], async (err, results) => {
     if (err) {
       return res.status(500).json({ message: 'Database error', error: err });
     }
