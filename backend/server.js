@@ -18,7 +18,7 @@ app.use(cors(
   }
 )); // To allow frontend requests*/
 // Allowing frontend URLs to be dynamic based on environment
-const allowedOrigins = [
+/*const allowedOrigins = [
   'http://localhost:3000',  // Local development URL
   process.env.FRONTEND_URL,  // Production frontend URL (set in environment variables)
 ];
@@ -28,7 +28,24 @@ app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:3000', // Frontend origin
   credentials: true, // Allow credentials (cookies)
+}));*/
+const allowedOrigins = [
+  'http://localhost:3000',          // Local development URL
+  'https://quizapp-yzib.onrender.com',  // Production frontend URL
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    // Check if the origin is allowed
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('CORS policy violation'), false);
+    }
+  },
+  credentials: true, // Allow cookies to be sent with requests
 }));
+
 
 // Session setup (before routes)
 app.use(session({
