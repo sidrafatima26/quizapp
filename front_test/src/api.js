@@ -1,7 +1,10 @@
+// Get the backend base URL from environment variables
+const apiBaseUrl = process.env.REACT_APP_BACKEND_BASEURL || 'http://localhost:5000'; // Default to local URL for local dev
+
 // Send OTP to the user's email
 export const sendOtp = async (email) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/send-otp`, {
+    const response = await fetch(`${apiBaseUrl}/api/send-otp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -22,10 +25,9 @@ export const sendOtp = async (email) => {
 };
 
 // Verify the OTP entered by the user
-
 export const verifyOtp = async (email, otp) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/verify-otp`, {
+    const response = await fetch(`${apiBaseUrl}/api/verify-otp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -53,7 +55,7 @@ export const verifyOtp = async (email, otp) => {
 // Fetch the details of a single quiz by its ID
 export const getQuizDetails = async (quizId) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/quiz/${quizId}`);
+    const response = await fetch(`${apiBaseUrl}/api/quiz/${quizId}`);
     if (!response.ok) {
       throw new Error('Failed to fetch quiz details');
     }
@@ -67,7 +69,7 @@ export const getQuizDetails = async (quizId) => {
 // Fetch all quizzes
 export const getQuizzes = async () => {
   try {
-    const response = await fetch(`http://localhost:5000/api/quizzes`);
+    const response = await fetch(`${apiBaseUrl}/api/quizzes`);
     if (!response.ok) {
       throw new Error('Failed to fetch quizzes');
     }
@@ -81,7 +83,7 @@ export const getQuizzes = async () => {
 // Submit quiz results
 export const submitQuizResult = async (result) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/submit-quiz`, {
+    const response = await fetch(`${apiBaseUrl}/api/submit-quiz`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
