@@ -133,7 +133,7 @@ app.post('/api/verify-otp', (req, res) => {
         // Create session for the user after OTP verification
         req.session.user = {
           userId: results.rows[0].id,
-          email: email,
+          email:"kholoods@amdocs.com",
           sessionId: req.sessionID, // Store session ID explicitly
         };
 
