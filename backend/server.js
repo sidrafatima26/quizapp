@@ -25,13 +25,8 @@ const allowedOrigins = [
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin) || !origin) {
-      return callback(null, true);
-    }
-    return callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true, // Allow cookies and credentials
+  origin: 'http://localhost:3000', // Frontend origin
+  credentials: true, // Allow credentials (cookies)
 }));
 
 // Session setup (before routes)
