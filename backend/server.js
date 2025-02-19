@@ -5,8 +5,8 @@ const crypto = require('crypto');
 const sendMail = require('./utils/mailer');  // Import the mailer code with PowerShell Outlook automation
 const db = require('./config/db'); // Import the MySQL database connection
 const session = require('express-session'); // Import express-session for session management
-const {Pool} = require('pg')
 
+const app = express();
 
 // Middleware
 /*app.use(express.json());
@@ -16,7 +16,7 @@ app.use(cors(
     credentials: true, // Allow cookies and credentials
   }
 )); // To allow frontend requests*/
-/*// Allowing frontend URLs to be dynamic based on environment
+// Allowing frontend URLs to be dynamic based on environment
 const allowedOrigins = [
   'http://localhost:3000',  // Local development URL
   process.env.FRONTEND_URL,  // Production frontend URL (set in environment variables)
@@ -32,37 +32,7 @@ app.use(cors({
     return callback(new Error('Not allowed by CORS'));
   },
   credentials: true, // Allow cookies and credentials
-}));*/
-
-
-const app = express();
-
-// PostgreSQL Connection Pool setup
-const db = new Pool({
-  connectionString: process.env.DB_CONNECTION_STRING,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
-
-// Middleware to handle CORS and JSON requests
-const allowedOrigins = [
-  'http://localhost:3000',  // Local development URL
-  process.env.FRONTEND_URL,  // Production frontend URL (set in environment variables)
-];
-
-app.use(express.json());
-app.use(cors({
-  origin: (origin, callback) => {
-    if (allowedOrigins.includes(origin) || !origin) {
-      return callback(null, true);
-    }
-    return callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true,  // Allow cookies and credentials
 }));
-
-
 
 // Session setup (before routes)
 app.use(session({
